@@ -1,6 +1,9 @@
 var fs = require('fs');
 var uuidV4 = require('uuid/v4');
 
+//Two spaces needed for line break
+const NEWLINE = '  \n';
+
 /**
  * Takes a note and serializes it into [(fileName, content)]
  */
@@ -18,7 +21,7 @@ var serialize = function(note) {
 
 
 var generateYamlFrontMatter = function(note) {
-    var lines = ['---'];
+    var lines = [];
     for (var key in note) {
         if (!note.hasOwnProperty(key))
             continue
@@ -39,13 +42,13 @@ var generateYamlFrontMatter = function(note) {
 
         lines.push(key + ': ' + val);
     }
-    lines.push('---')
 
-    return lines.join("\n");
+    return lines.join(NEWLINE);
 }
 
 function generateOutputFile(note) {
-    return generateYamlFrontMatter(note) + '\n' + note.content;
+    //Two newlines required to seperate block quote
+    return generateYamlFrontMatter(note) + NEWLINE + NEWLINE + '>' + note.content.replace('\n','\n>') + NEWLINE + NEWLINE;
 }
 
 function generateFilename(note) {
