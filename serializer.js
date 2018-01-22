@@ -48,7 +48,7 @@ var generateYamlFrontMatter = function(note) {
 
 function generateOutputFile(note) {
     //Two newlines required to seperate block quote
-    return generateYamlFrontMatter(note) + NEWLINE + NEWLINE + '>' + note.content.replace('\n','\n>') + NEWLINE + NEWLINE;
+    return generateYamlFrontMatter(note) + NEWLINE + NEWLINE + '>' + note.content.replace(/\n/g,'\n>') + NEWLINE + NEWLINE;
 }
 
 function generateFilename(note) {

@@ -33,7 +33,32 @@ function parse(data) {
 	var note = {};
 	note.content = $(".content").html();
 
-    var turndownService = new turndown()
+    var turndownService = new turndown({defaultReplacement: function (content, node) { return content + '  \n' }})
+    turndownService.remove(function(node, opts) {
+          return(node.getAttribute('class') === 'bullet');
+        });
+    turndownService.addRule('Check', {
+      filter: function(node, opts)
+        {
+          return(node.getAttribute('class') === 'listitem checked');
+        },
+      replacement: function (content) 
+        {
+          return '[X] - ' + content
+        }
+    })
+
+    turndownService.addRule('unCheck', {
+      filter: function(node, opts)
+        {
+          return(node.getAttribute('class') === 'listitem');
+        },
+      replacement: function (content) 
+        {
+          return '[ ] - ' + content
+        }
+    })
+
     note.content = turndownService.turndown(note.content)
 
 	// FIXME: What about timezone?
