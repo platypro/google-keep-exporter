@@ -1,5 +1,5 @@
 var cheerio = require('cheerio');
-var toMarkdown = require('to-markdown');
+var turndown = require('turndown');
 var moment = require('moment');
 
 
@@ -27,24 +27,14 @@ function getImages(node) {
     return images;
 }
 
-var converter = {
-    filter: 'div',
-    /*
-    filter: function(node) {
-        return node.className.indexOf('listitem') != -1;
-    },
-    */
-    replacement: function(innerHTML, node) {
-        return innerHTML + ' ';
-    }
-}
-
 function parse(data) {
 	var $ = cheerio.load(data);
 
 	var note = {};
 	note.content = $(".content").html();
-	note.content = toMarkdown(note.content, {converters: [converter]}).trim();
+
+    var turndownService = new turndown()
+    note.content = turndownService.turndown(note.content)
 
 	// FIXME: What about timezone?
 	note.date = $(".heading").text().trim();
